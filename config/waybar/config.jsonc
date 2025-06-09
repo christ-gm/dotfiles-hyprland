@@ -1,0 +1,48 @@
+// -*- mode: jsonc -*-
+{
+    //GENERAL SETTINGS
+    "layer": "top", // frente a las ventanas ->top; detras de las ventanas ->bottom default
+    "position": "top", // Waybar position (top|bottom|left|right)
+    "mode": "dock",
+    "height": 30, // altura Waybar (to be removed for auto height)
+    "exclusive": true,
+    "passthrough": false,
+    "reload_style_on_change": true,
+    // "margin-top": 14,
+    // "margin-bottom": 0,
+    // "width": 1280, // Ancho de waybar
+    "spacing": 4, // Espacio entre modulos (default 4px)
+    
+    // LOAD MODULES
+    "include": ["~/.config/waybar/modules.jsonc"],
+    
+    // MODULES LEFT
+    "modules-left": [
+        "hyprland/workspaces",
+        "hyprland/mode",
+        "hyprland/scratchpad",
+        "custom/media"
+    ],
+
+    // MODULES CENTER
+    "modules-center": [
+        "hyprland/window"
+    ],
+
+    // MODULES RIGHT
+    "modules-right": [
+        "pulseaudio",
+        "network",
+        "power-profiles-daemon",
+        "cpu",
+        "memory",
+        "backlight",
+        "keyboard-state",
+        "hyprland/language",
+        "battery",
+        "battery#bat2",
+        "clock",
+        // "tray",
+        "custom/power"
+    ]
+}
