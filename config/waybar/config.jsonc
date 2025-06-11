@@ -3,15 +3,17 @@
     //GENERAL SETTINGS
     "layer": "top", // frente a las ventanas ->top; detras de las ventanas ->bottom default
     "position": "top", // Waybar position (top|bottom|left|right)
-    "mode": "dock",
-    "height": 30, // altura Waybar (to be removed for auto height)
+    // "height": 30, // altura Waybar (to be removed for auto height)
     "exclusive": true,
     "passthrough": false,
     "reload_style_on_change": true,
     // "margin-top": 14,
     // "margin-bottom": 0,
-    // "width": 1280, // Ancho de waybar
+    // "margin-left": 0,
+    // "margin-right": 0,
+    // "width": 1920, // Ancho de waybar. si no se especifica es auto.
     "spacing": 4, // Espacio entre modulos (default 4px)
+    "mode": "dock",
     
     // LOAD MODULES
     "include": ["~/.config/waybar/modules.jsonc"],
@@ -19,9 +21,10 @@
     // MODULES LEFT
     "modules-left": [
         "hyprland/workspaces",
-        "hyprland/mode",
-        "hyprland/scratchpad",
-        "custom/media"
+        "network"
+        // "hyprland/mode",
+        // "hyprland/scratchpad",
+        // "custom/media"
     ],
 
     // MODULES CENTER
@@ -32,17 +35,18 @@
     // MODULES RIGHT
     "modules-right": [
         "pulseaudio",
-        "network",
-        "power-profiles-daemon",
+        "bluetooth",
+        // "tray",
         "cpu",
         "memory",
-        "backlight",
         "keyboard-state",
         "hyprland/language",
-        "battery",
-        "battery#bat2",
         "clock",
-        // "tray",
-        "custom/power"
+        
+        // "power-profiles-daemon",
+        // "backlight",
+        // "battery",
+        // "battery#bat2",
+        "custom/power" //must be the last
     ]
 }
