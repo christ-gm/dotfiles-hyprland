@@ -4,8 +4,6 @@
     "hyprland/workspaces": {
         "active-only": false, //if true only active workspace will be shown on bar, if false all active workspaces are shown.
         "all-outputs": false, // false → Muestra workspaces solo en su monitor asignado | true → Muestra todos los workspaces en todos los monitores.
-        // "disable-scroll": true,// NO USE
-        // "warp-on-scroll": true,// NO USE
         "format": "{icon}",
         "format-icons": {
             "1": "一",
@@ -21,110 +19,86 @@
         },
         "persistent-workspaces":{
             "*": 10 //mostrar por defecto cuantos workspaces | "monitor": n_workspaces
-        },
-        // "window-rewrite": ,
-        // "window-rewrite-default": ,
-        // "format-window-separator": "",
-        // "ignore-workspaces": 
+        }
     },
     // HYPRLAND WINDOW
     "hyprland/window": {
-        "format": "{title}",
+        "format": "  {}",
+        "separate-outputs": true,
         "rewrite": {
-            "(.*) — Mozilla Firefox": "🌎 $1",// AQUI QUEDE
+            "(.*)${USER}@${set_sysname}:(.*)": "$1  :$2",
+            "(.*) — Mozilla Firefox": "$1 󰈹",
+            "(.*)Mozilla Firefox": "$1 Firefox 󰈹",
+            "(.*) - Visual Studio Code": "$1 󰨞",
+            "(.*)Visual Studio Code": "$1 Code 󰨞",
+            "(.*) — Dolphin": "$1 󰉋",
+            "(.*)Spotify.*": "$1 Spotify 󰓇",
+            "(.*)Steam": "$1 Steam 󰓓",
+            "(.*) - Discord": "$1  ",
+            "(.*?)-\\s*YouTube(.*)": "$1󰗃", 
+            "(.*?\\s)YouTube(.*)": "$1YouTube 󰗃"
         },
-        "separate-outputs": true
+        "max-length": 50
 },
-    // HYPRLAND KEYBOARD
-    "keyboard-state": {
-        "numlock": false,
-        "capslock": true,
-        "format": "{name} {icon}",
-        "format-icons": {
-            "locked": "",
-            "unlocked": ""
-        }
-    },
-    
-    // "sway/mode": {
-    //     "format": "<span style=\"italic\">{}</span>"
-    // },
-    "hyprland/scratchpad": {
-        "format": "{icon} {count}",
-        "show-empty": false,
-        "format-icons": ["", ""],
-        "tooltip": true,
-        "tooltip-format": "{app}: {title}"
-    },
     // CLOCK
     "clock": {
+        "format": "  {:%I:%M %p}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
     },
     // CPU
     "cpu": {
-        "format": "{usage}%",
-        "tooltip": true
+        "format": "  {usage}%",
+        "on-click": "kitty btop",
+        "interval": 1,
+        "tooltip": true,
+        "states": {
+            "light": 30,
+            "warning": 50,
+            "critical": 80
+        }
     },
     // MEMORY
     "memory": {
-        "format": "{}%"
+        "format": "  {}%"
     },
     // BACKLIGHT
     "backlight": {
-        // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
+        "device": "intel_backlight",
+        "format": "{icon} {percent}%",
         "format-icons": ["", "", "", "", "", "", "", "", ""]
     },
     // BATTERY
     "battery": {
         "states": {
-            // "good": 95,
+            "good": 95,
             "warning": 30,
             "critical": 15
         },
-        "format": "{capacity}% {icon}",
-        "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
-        "format-plugged": "{capacity}% ",
-        "format-alt": "{time} {icon}",
-        // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
+        "format": "{icon}  {capacity}%",
+        "format-full": "{icon}  {capacity}%",
+        "format-charging": "󰂉 {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-alt": "{icon}  {time}",
         "format-icons": ["", "", "", "", ""]
-    },
-    "battery#bat2": {
-        "bat": "BAT2"
-    },
-    "power-profiles-daemon": {
-      "format": "{icon}",
-      "tooltip-format": "Power profile: {profile}\nDriver: {driver}",
-      "tooltip": true,
-      "format-icons": {
-        "default": "",
-        "performance": "",
-        "balanced": "",
-        "power-saver": ""
-      }
     },
     // NETWORK
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": " {ipaddr}/{cidr}",
+        "format-wifi": "  {essid}",
+        "format-ethernet": "󰈀",
         "tooltip-format": "{ifname} via {gwaddr}",
         "format-linked": "{ifname} (No IP)",
-        "format-disconnected": "Disconnected",
+        "format-disconnected": " Disconnected",
         "format-alt": "{ifname}:{ipaddr}/{cidr}"
     },
     // PULSEAUDIO (PIPEWIRE-PULSE)
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
-        "format": "{volume}%{icon}",
-        "format-bluetooth": "{volume}%{icon}",
-        "format-bluetooth-muted": "󰗿 {icon}",
+        "format": "{icon}  {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-bluetooth-muted": "󰗿 {icon}",
         "format-muted": "󰖁 {format_source}",
-        // "format-source": "{volume}% ",
-        // "format-source-muted": "",
         "format-icons": {
             "headphone": "",
             "headset": "",
@@ -135,7 +109,7 @@
     // BLUETOOTH
     "bluetooth":{
         "format": "{icon}",
-        "format-disabled": "disabled",
+        "format-disabled": "󰂲",
         "format-off": "{icon}",
         "format-on": "{icon}",
         "format-connected": "{icon}",
@@ -149,8 +123,11 @@
             "connected": "󰂱"
         }
     },
-    "hyprland/language": {
-        "format": "{short}"
+    // TEMPERATURE
+    "temperature":{
+        "thermal-zone": 7,
+        "format": "{temperatureC}°C "
+
     },
     // "custom/media": {
     //     "format": "{icon} {text}",
@@ -164,17 +141,15 @@
     //     "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
     //     // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     // },
+
+    // "custom/windows": {
+        // "format": "{}",
+        // "exec": "windows.sh",
+        // "interval": 2
+    // },
+
     "custom/power": {
-        "format" : "⏻",
+        "format" : "⏻  ",
         "on-click": "wlogout"
-		// "tooltip": true,
-		// "tooltip-format": "poweoff",
-		// "menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
-		// "menu-actions": {
-			// "shutdown": "shutdown",
-			// "reboot": "reboot",
-			// "suspend": "systemctl suspend",
-			// "hibernate": "systemctl hibernate"
-		// }
     }
 }

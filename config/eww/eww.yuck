@@ -1,0 +1,13 @@
+;;variables;;
+(deflisten workspaces :initial "[]" "sh ~/.config/eww/scripts/get-workspaces.sh")
+(deflisten current_workspace :initial "1" "sh ~/.config/eww/scripts/get-active-workspace.sh")
+(defvar eww "eww -c ~/.config/eww/")
+
+
+;;defpolls;;
+(defpoll wallpapers :interval "10m" :initial "[1]" "sh ~/.config/eww/scripts/get-wallpapers.sh")
+
+
+;;widgets
+(include "widgets/bar.yuck")
+(include "widgets/wallpaper.yuck")

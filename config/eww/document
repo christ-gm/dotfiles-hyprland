@@ -1,0 +1,100 @@
+; (defwindow powermenu
+;   :monitor 0
+;   :stacking "fg"
+;   :windowtype "dock"
+;   :wm-ignore true
+;   :geometry (geometry
+;               :width "100%"
+;               :height "20%")
+;   (box :orientation "vertical" :class "bx"
+;       (button :onclick "notify-send Hello")
+;       (label :text "Hello, World")))
+
+; (defwindow dummy
+  ; :monitor 0
+  ; :windowtype "normal"
+  ; :stacking "fr"
+  ; :geometry (geometry
+              ; :width "20%"
+              ; :height "20%")
+  ; (button :onclick "notify-send Left"
+  ; :onrightclick "notify-send Right"
+  ; (label :text "Click Me!")
+; )
+; )
+
+(defwindow dummy
+  :monitor 0
+  :stacking "fg"
+  :windowtype "normal"
+  :geometry (geometry
+            :width "80%"
+            :height "20%"
+            )
+  (box :orientation "vertical" :class "bx"
+  (label :text "This is a label")
+  (button :class "btn"
+    (label :text "This is a label nested inside of a button.")
+  )
+  ;;no orientation means horizontal -> default
+  (box :class "nst-bx"
+    (label :text "Hello" :limit-width 4)
+    (button 
+    :class "btn" 
+    :onclick "notify-send Left"
+    :onrightclick "notify-send Middle"
+    (label :text "This is a button")
+    )
+    (label :text "Hello")
+  )
+  (lol)
+)
+)
+
+(defwindow dummyy
+  :monitor 0
+  :stacking "fg"
+  :windowtype "normal"
+  :geometry (geometry
+            :x "10%" ;; [0 - 100%]
+            :y "0%"
+            :width "80%"
+            :height "30%"
+            )
+  (label :text "${time.hour} : ${time.min}")
+)
+
+;; defining widget
+(defwidget lol []
+  (box :orientation "vertical"
+  (label :text "This is a label inside a box which is inside of a widget")
+  (label :text time)
+  )
+)
+;; definir poll variable para correr un comando en un intervalo de tiempo
+(defpoll time :interval "5s"
+  `date +'{"hour":"%H","min":"%M","sec":"%s"}'`
+)
+
+################# PROPIEDADES DE WINDOWS###########
+
+dentro de .geometry:
+
+  - :width "x% or xpx" -> tamaño del ancho de la ventana. puede ser en % o en pixeles
+  - :height "x% or xpx" -> tamaño del alto la ventana. puede ser en % o en pixeles
+  - :x "x% or xpx" -> posicion x de la ventana. puede ser en % o px
+  - :y "x% or xpx" -> posicion y de la ventana. puede ser en % o px
+  - :anchor "either center or combinations of top, center, bottom and left, center, right" en vez de utilizar x o y puedes usar esto.
+
+fuera de geometry
+
+- :stacking "fg, bg, overlay, bottom" -> fg y overlay son parecidos, se muestran frentes las ventanas.
+                                        mientrasa bg y bottom se muestran por detras.
+
+- :exclusive "bool" -> Solo es útil si quieres que el compositor evite superposiciones (ejemplo típico: barras o docks)
+              si es "true" es obligatorio tener un :anchor "center". tambien es valido el "top center"
+
+- :focusable "none, exclusive, ondemand". es para que la ventana sea focusable cuando se le pasa el mouse encima. es mejor utilizar el ondemand o el none.
+
+
+#########WIDGETS##################

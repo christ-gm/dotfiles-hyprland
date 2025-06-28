@@ -18,7 +18,10 @@ function install_base_packages() {
         tar \
         bluez bluez-utils blueman \
         noto-fonts noto-fonts-cjk noto-fonts-emoji \
-        git base-devel
+        git base-devel \
+        hyprshot \
+        hyprpaper \
+        hyprlock
     
     if [ $? -ne 0 ]; then
         echo -e "${RED}Error al instalar paquetes base${NC}"
@@ -47,12 +50,16 @@ function install_yay() {
 function install_aur_packages() {
     echo -e "${BLUE}Instalando Paquetes AUR...${NC}"
     yay -S --noconfirm \
+        code \
         ttf-nerd-fonts-symbols \
         ttf-jetbrains-mono-nerd \
         ttf-3270-nerd \
+        ttf-iosevka \
         wlogout \
         wayland-logout \
-        swaylock
+        socat \
+        jq \
+        python-pywal
     
     fc-cache -fv
 }
@@ -159,6 +166,18 @@ function install_fonts(){
     sleep 0.5
 }
 
+# Instalar eww
+function install_eww(){
+    cd $HOME
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    git clone https://github.com/elkowar/eww
+    cd eww
+    cargo build --release --no-default-features --features=wayland
+    cd target/release
+    chmod +x ./eww
+    sudo cp ./eww /usr/local/bin/
+}
+
 install_base_packages
 install_yay
 install_aur_packages
@@ -166,5 +185,6 @@ enable_services
 copy_dotfiles
 configure_sddm_nopass
 install_fonts
+install_eww
 
 echo -e "${CYAN}HAPPY HACKING :)${NC}"
