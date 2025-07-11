@@ -12,6 +12,13 @@ NC='\e[0m' # No Color
 function install_base_packages() {
     echo -e "${BLUE}Instalando paquetes base...${NC}"
     sudo pacman -S --needed --noconfirm \
+        networkmanager \
+        brightnessctl \
+        less \
+        sed \
+        awk \
+        rofi \
+        btop \
         waybar \
         pavucontrol \
         curl \
@@ -21,7 +28,8 @@ function install_base_packages() {
         git base-devel \
         hyprshot \
         hyprpaper \
-        hyprlock
+        hyprlock \
+        hyprshade
     
     if [ $? -ne 0 ]; then
         echo -e "${RED}Error al instalar paquetes base${NC}"
@@ -85,10 +93,13 @@ function enable_services() {
 function copy_dotfiles() {
     echo -e "${BLUE}Copiando Configuraciones...${NC}"
     sleep 0.5
+    cd $HOME/dotfiles-hyprland
     
-    mkdir -p ~/.config ~/.local/bin ~/.local/share/fonts
-    cp -r config/* "$HOME/.config/" || echo -e "${YELLOW}Advertencia: Error al copiar configuraciones${NC}"
+    mkdir -p ~/.config ~/.local/bin ~/.local/share/fonts ~/wallpapers ~/.cache
+    cp -r .config/* "$HOME/.config/" || echo -e "${YELLOW}Advertencia: Error al copiar configuraciones${NC}"
     cp -r scripts/* "$HOME/.local/bin" || echo -e "${YELLOW}Advertencia: Error al copiar scripts${NC}"
+    cp -r wallpapers/* "$HOME/wallpapers" || echo -e "${YELLOW}Advertencia: Error al copiar wallpapers${NC}"
+    cp -r .cache/* "$HOME/.cache" || echo -e "${YELLOW}Advertencia: Error al copiar .cache${NC}"
 }
 
 # Configurar SDDM sin contraseña
@@ -176,6 +187,7 @@ function install_eww(){
     cd target/release
     chmod +x ./eww
     sudo cp ./eww /usr/local/bin/
+    cd $HOME
 }
 
 install_base_packages

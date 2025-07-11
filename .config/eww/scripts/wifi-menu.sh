@@ -1,0 +1,1 @@
+sh ~/.config/eww/scripts/wifi_settings.sh

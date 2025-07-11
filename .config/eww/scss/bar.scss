@@ -1,0 +1,216 @@
+.main-bar {
+  background-color: mix($background, $foreground, 95%);
+  padding: 5px;
+  border-radius: 12px;
+}
+
+.launcher {
+  font-size: 1.2rem;
+  color: $foreground;
+  padding: 0 12px 0 8px;
+  border-radius: 8px;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.launcher:hover {
+  background-color: mix($background, $foreground, 80%);
+}
+
+.powermenu {
+  background-color: mix($background, $foreground, 98%);
+  color: $foreground;
+  font-size: 1rem;
+  padding: 0 12px 0 8px;
+  margin: 0 0 0 6px;
+  border-radius: 8px;
+}
+
+.shutdown {
+padding: 0 8px 0 5px;
+margin: 0 3px 0 3px;
+}
+.shutdown:hover {
+  background-color: mix($background, $foreground, 70%);
+  border-radius: 8px;
+}
+.reboot {
+  padding: 0 8px 0 5px;
+  margin: 0 3px 0 3px;
+}
+.reboot:hover {
+  background-color: mix($background, $foreground, 70%);
+  border-radius: 8px;
+}
+.lock {
+  padding: 0 8px 0 5px;
+  margin: 0 3px 0 3px;
+}
+.lock:hover {
+  background-color: mix($background, $foreground, 70%);
+  border-radius: 8px;
+}
+
+tooltip.background {
+  color: $foreground;
+  background-color: $background;
+  border-radius: 8px;
+}
+
+.workspaces {
+  font-weight: 900;
+  font-size: 1.1rem;
+  border-radius: 50px;
+  padding: 0 4px;
+}
+
+.workspace {
+  color: $color3;
+  border-radius: 1rem;
+  margin: 0 0.25rem;
+  padding: 0 0.1rem;
+  transition: color 0.3s ease-in-out;
+}
+
+.workspace.current {
+  color: $color2;
+}
+
+.workspace:hover {
+  color: mix($foreground, $color2, 70%);
+}
+
+// clock
+
+.clock {
+  color: $color6;
+  padding: 0 4px 0 4px;
+}
+
+.right {
+  color: $background;
+  font-size: 1.1rem;
+  border-radius: 50px;
+}
+
+// calendar
+.cal{
+  background-color: mix($background, $foreground, 95%);
+  border-radius: 12px;
+  padding: 4px;
+}
+
+.calendar{
+  padding: 0 4px 0 8px;
+}
+
+.cal:selected{
+  background-color: $color9;
+  font-weight: bold;
+}
+
+.cal.indeterminate{
+  background-color: $color9;
+}
+
+//wifi
+
+.wifi-icon {
+  color: mix($color2, $foreground, 90%);
+  font-size: 1.1rem;
+}
+
+.wifi{
+  padding: 0 12px 0 4px;
+}
+
+.wifi-label{
+  color: mix($color2, $foreground, 90%);
+  margin: 0 0 0 12px;
+}
+
+// VOLUME
+.volume-icon{
+  color: mix($color5, $foreground, 90%);
+  padding: 0 10px 0 0;
+  font-size: 1rem;
+}
+
+.volume{
+  margin: 0 4px;
+}
+
+.volbar trough {
+  all: unset;
+  background-color: mix($background, $foreground, 80%);
+  border-radius: 5px;
+  min-height: 4px;
+  min-width: 50px;
+  margin: 0 .5rem 0 .1rem ;
+}
+
+.volbar trough highlight {
+  min-height: 8px;
+  background-color: mix($color5, $foreground, 90%);
+  border-radius: 5px;
+}
+
+// BRIGHTNESS
+
+.brightnessbar trough {
+  all: unset;
+  background-color: mix($background, $foreground, 80%);
+  border-radius: 5px;
+  min-height: 4px;
+  min-width: 50px;
+  margin: 0 .5rem 0 .1rem ;
+}
+
+.brightnessbar trough highlight {
+  min-height: 8px;
+  background-color: mix($color6, $foreground, 90%);
+  border-radius: 5px;
+}
+
+.brightness-icon{
+  color: mix($color6, $foreground, 90%);
+  padding: 0 6px 0 2px;
+  font-size: 1.1rem;
+}
+
+.brightness{
+  margin: 0 4px;
+}
+
+// Battery
+
+.batterybar{
+  margin: 0 0 0 12px;
+  color: mix($color3, $foreground, 90%);
+  background-color: mix($background, $foreground, 80%)
+}
+
+.battery-icon{
+  padding: 2px;
+  color: transparent;
+}
+
+.battery-label{
+  color: mix($color3, $foreground, 90%);
+  margin: 0 4px 0 4px;
+}
+
+// Memory
+.memorybar{
+  margin: 0 0 0 12px;
+  color: mix($color3, $foreground, 90%);
+  background-color: mix($background, $foreground, 80%)
+}
+.memory-icon{
+  padding: 2px;
+  color: transparent;
+}
+
+.memory-label{
+  color: mix($color3, $foreground, 90%);
+  margin: 0 4px 0 4px;
+}

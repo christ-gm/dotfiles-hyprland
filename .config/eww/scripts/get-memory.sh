@@ -1,0 +1,1 @@
+printf "%.0f\n" $(free -m | grep Mem | awk -F ' ' '{print ($3/$2)*100}')

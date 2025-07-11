@@ -1,0 +1,10 @@
+@import "../../.cache/wal/colors.scss";
+
+*{
+    all: unset;
+    font-family: "Iosevka";
+    font-weight: bold;
+}
+
+@import "scss/bar.scss";
+@import "scss/wallpaper.scss"

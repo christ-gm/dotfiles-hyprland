@@ -1,0 +1,134 @@
+; (defwindow powermenu
+;   :monitor 0
+;   :stacking "fg"
+;   :windowtype "dock"
+;   :wm-ignore true
+;   :geometry (geometry
+;               :width "100%"
+;               :height "20%")
+;   (box :orientation "vertical" :class "bx"
+;       (button :onclick "notify-send Hello")
+;       (label :text "Hello, World")))
+
+; (defwindow dummy
+  ; :monitor 0
+  ; :windowtype "normal"
+  ; :stacking "fr"
+  ; :geometry (geometry
+              ; :width "20%"
+              ; :height "20%")
+  ; (button :onclick "notify-send Left"
+  ; :onrightclick "notify-send Right"
+  ; (label :text "Click Me!")
+; )
+; )
+
+(defwindow dummy
+  :monitor 0
+  :stacking "fg"
+  :windowtype "normal"
+  :geometry (geometry
+            :width "80%"
+            :height "20%"
+            )
+  (box :orientation "vertical" :class "bx"
+  (label :text "This is a label")
+  (button :class "btn"
+    (label :text "This is a label nested inside of a button.")
+  )
+  ;;no orientation means horizontal -> default
+  (box :class "nst-bx"
+    (label :text "Hello" :limit-width 4)
+    (button 
+    :class "btn" 
+    :onclick "notify-send Left"
+    :onrightclick "notify-send Middle"
+    (label :text "This is a button")
+    )
+    (label :text "Hello")
+  )
+  (lol)
+)
+)
+
+(defwindow dummyy
+  :monitor 0
+  :stacking "fg"
+  :windowtype "normal"
+  :geometry (geometry
+            :x "10%" ;; [0 - 100%]
+            :y "0%"
+            :width "80%"
+            :height "30%"
+            )
+  (label :text "${time.hour} : ${time.min}")
+)
+
+;; defining widget
+(defwidget lol []
+  (box :orientation "vertical"
+  (label :text "This is a label inside a box which is inside of a widget")
+  (label :text time)
+  )
+)
+;; definir poll variable para correr un comando en un intervalo de tiempo
+(defpoll time :interval "5s"
+  `date +'{"hour":"%H","min":"%M","sec":"%s"}'`
+)
+
+################# PROPIEDADES DE WINDOWS###########
+
+dentro de .geometry:
+
+  - :width "x% or xpx" -> tamaño del ancho de la ventana. puede ser en % o en pixeles
+  - :height "x% or xpx" -> tamaño del alto la ventana. puede ser en % o en pixeles
+  - :x "x% or xpx" -> posicion x de la ventana. puede ser en % o px
+  - :y "x% or xpx" -> posicion y de la ventana. puede ser en % o px
+  - :anchor "either center or combinations of top, center, bottom and left, center, right" en vez de utilizar x o y puedes usar esto.
+
+fuera de geometry
+
+- :stacking "fg, bg, overlay, bottom" -> fg y overlay son parecidos, se muestran frentes las ventanas.
+                                        mientrasa bg y bottom se muestran por detras.
+
+- :exclusive "bool" -> Solo es útil si quieres que el compositor evite superposiciones (ejemplo típico: barras o docks). reserva el espacio
+              si es "true" es obligatorio tener un :anchor "center". tambien es valido el "top center"
+
+- :focusable "none, exclusive, ondemand". es para que la ventana sea focusable cuando se le pasa el mouse encima. es mejor utilizar el ondemand o el none.
+
+
+#########WIDGETS##################
+
+al parecer casi siempre se crea la ventana y luego el widget de la ventana. por ejemplo defwindow bar y luego defwidget bar
+
+- :class es la clase que recibira. util para el superposiciones
+- :valign "fill, baseline, center, start, end" como alinear esto verticalmente
+- :halign "fill, baseline, center, start, end" como alinear esto horizontalmente
+- :vexpand "bool" deberia expandirse este contenedor verticalmente. default false
+- :hexpand "bool" deberia expandirse este contenedor horizontalmente. default false
+- :width int ancho de este elemento.
+- :height int alto de este elemento.
+- :active "bool" si se puede interactuar con el widget. default true
+- :tooltip "string" que debe decir al hacer hover sobre el mouse 
+- :visible "bool" visibilidad del widget
+- :style "string" aplicar estilo scss en linea
+- :css "string" lo mismo
+
+######### WIDGETS MAS UTILIZADOS#########
+
+**IMPORTANTE. PARA QUE NO SE INTERPRETEN COSAS COMO "" DENTRO DE "" O $HOME se deben utilizar \ antes**
+
+**IMPORTANTE ACERCA DEFPOLL** el defpoll se ejecuta cuando se abre el widget. y el interval es cada cuanto se actualiza.
+
+
+- eventbox -> contenedor el cual puede recibir eventos y debe contener solamente 1 hijo
+
+- revealer -> widget que que puede revelar un hijo con animacion.
+    :transition "slideright, slideleft, slideup, slidedown, crossfade, none"
+    :reveal "bool" colocar si el hijo es revelado o no. para que sea interactivo ideal alternar entre true o false. como en el bar.launcher
+    :duration "500ms" default 500ms
+
+- box -> main layout container
+    :spacing int espacio entre elementos
+    :orientation "vertical, v, horizontal, h"
+    :space-evenly "bool" espacios iguales entre los elementos

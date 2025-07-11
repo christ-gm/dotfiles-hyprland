@@ -1,0 +1,255 @@
+;;widgets
+;; LEFT
+(defwidget launcher []
+    (eventbox :onhover "${eww} update launcher=true" ; esto sirve para el reveal mas abajo
+                :onhoverlost "${eww} update launcher=false"
+                :cursor "pointer"
+        (box :orientation "h"
+            :space-evenly "false"
+            (button :class "launcher"
+                    :onclick "~/.config/eww/scripts/launch-menu.sh" "󰣇")
+            (revealer :transition "slideright"
+                        :reveal launcher ;;este launcher esta definido en eww.yuck como falso. se actualiza con el hover
+                        :duration "300ms"
+                (box :class "powermenu"
+                    :orientation "horizontal"
+                    :space-evenly "true"
+                    ;:spacing 12
+                (button :class "shutdown"
+                        :tooltip "Power Off"
+                        :onclick "shutdown now" "")
+                (button :class "reboot"
+                        :tooltip "Reboot"
+                        :onclick "reboot" "")
+                (button :class "lock"
+                        :tooltip "Lock"
+                        :onclick "~/.config/eww/scripts/lock.sh" "")))))
+)
+
+(defwidget workspaces []
+  (eventbox :onscroll "sh ~/.config/eww/scripts/change-active-workspace.sh {} ${current_workspace}"
+    (box :orientation "h"
+         :space-evenly "false"
+         :class "workspaces"
+         :hexpand "true"
+      (for workspace in workspaces
+        (button :class "workspace ${current_workspace == workspace.id ? "current" : ""}"
+                :onclick "hyprctl dispatch workspace ${workspace.id}"
+                "${current_workspace == workspace.id ? "" : ""}"))))
+      )
+
+;; LEFT
+(defwidget left []
+    (box
+    :class "left"
+    :orientation "horizontal"
+    :space-evenly "false"
+    :halign "start"
+    :vexpand "false"
+    :hexpand "false"
+    ;;widget de workspaces
+    (launcher)
+    (workspaces)
+    )
+)
+
+;; RIGHT
+(defwidget right []
+    (box
+    :class "right"
+    :orientation "horizontal"
+    :space-evenly "false"
+    :halign "end"
+    :vexpand "false"
+    :hexpand "false"
+    (memory)
+    (battery)
+    (brightness)
+    (volume)
+    (wifi)
+    (clock))
+)
+
+;; CENTER
+(defwidget center []
+    (box
+    :class "center"
+    :orientation "horizontal"
+    :space-evenly "false"
+    :halign "center"
+    :vexpand "false"
+    :hexpand "false"
+    ; (music)
+    ))
+
+; (defwidget music []
+; )
+
+;; CLOCK ;;
+(defwidget clock []
+    (eventbox :onhover "${eww} update calendar=true"
+            :onhoverlost "${eww} update calendar=false"
+            :cursor "pointer"
+        (box :class "clock"
+            :orientation "horizontal"
+            :space-evenly "false"
+            clock   ;este clock es la variable que esta en eww.yuck
+            (revealer :transition "slideleft"
+                    :reveal calendar
+                (button :class "calendar"
+                        :onclick "~/.config/eww/scripts/calendar-popup.sh"
+                        calendar-short)))))
+;; CALENDAR ;;
+(defwidget cal []
+	(box :class "cal-box" 
+		 :orientation "v"
+	(box :class "cal-inner-box"
+	(calendar :class "cal" 
+			  :day calendar-day 
+			  :month calendar-month 
+			  :year calendar-year))))
+
+;; MEMORY ;;
+(defwidget memory []
+(eventbox :onhover "${eww} update memory=true"
+        :onhoverlost "${eww} update memory=false"
+    (box :class "memory"
+        :orientation "horizontal"
+        :space-evenly "false"
+        (circular-progress :value current-memory
+                        :class "memorybar"
+                        :thickness 4
+            (button :class "memory-icon"
+                    :tooltip "memory used ${current-memory}%" ""))
+    (revealer :transition "slideleft"
+            :reveal memory
+            :duration "300ms"
+        (label :class "memory-label"
+            :tooltip "memory used ${current-memory}%"
+            :text "${current-memory}%")))))
+
+
+; ;; BATTERY ;;
+(defwidget battery []
+(eventbox :onhover "${eww} update battery=true"
+          :onhoverlost "${eww} update battery=false"
+  (box  :class "battery"
+        :orientation "horizontal"
+        :space-evenly "false"
+        :visible has-battery
+    (circular-progress :value current-battery
+                       :class "batterybar"
+                       :thickness 4
+      (button :class "battery-icon"
+              :tooltip time-left
+              ""))
+      (revealer :transition "slideleft"
+                :reveal battery
+                :duration "300ms"
+        (label  :class "battery-label"
+                :tooltip time-left
+                :text "${current-battery}%")))))
+
+
+;; BRIGHTNESS
+(defwidget brightness []
+    (eventbox :onhover "${eww} update brightness=true"
+            :onhoverlost "${eww} update brightness=false"
+            :cursor "pointer"
+        (box :class "brightness"
+            :orientation "horizontal"
+            :tooltip "Brightness: ${current-brightness}%"
+            :space-evenly "false"
+            :spacing "2"
+            :visible adjustable-brightness
+            (button :class "brightness-icon" "󰖨")
+        (revealer :transition "slideleft"
+                :reveal brightness
+                :duration "300ms"
+            (scale :class "brightnessbar"
+                    :value current-brightness
+                    :orientation "horizontal"
+                    :max 101
+                    :min 0
+                    :onchange "brightnessctl s {}%")))))
+
+;; VOLUME ;;
+(defwidget volume []
+    (eventbox :onhover "${eww} update volume=true"
+            :onhoverlost "${eww} update volume=false"
+            :cursor "pointer"
+        (box :class "volume"
+            :tooltip "Volume: ${current-volume}%"
+            :orientation "horizontal"
+            :space-evenly "false"
+            :spacing "2"
+            (button :class "volume-icon" volume-icon)
+            (revealer :transition "slideleft"
+                    :reveal volume
+                    :duration "300ms"
+                (scale :class "volbar"
+                    :value current-volume
+                    :orientation "horizontal"
+                    :max 101
+                    :min 0
+                    :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%")))))
+
+
+;; WIFI-ETH
+(defwidget wifi []
+    (eventbox :onhover "${eww} update wifi=true"
+            :onhoverlost "${eww} update wifi=false"
+            :tooltip "Connected to ${current-wifi}"
+        (box :class "wifi"
+            :orientation "horizontal"
+            :space-evenly "false"
+            (button :class "wifi-icon"
+                    :onclick "~/.config/eww/scripts/wifi-menu.sh" wifi-strength) ;el wifi-strength es la fuerza del wifi
+            (revealer :transition "slideright"
+                    :reveal wifi
+                    :duration "300ms"
+                (button :onclick "~/.config/eww/scripts/wifi-menu.sh"
+                    (label :class "wifi-label"
+                            :text current-wifi))))))
+
+
+
+;; MAIN BAR
+(defwidget bar []
+    (box
+    :class "main-bar"
+    :orientation "horizontal"
+    :vexpand "false"
+    :hexpand "false"
+    ;;widget con modulos que iran en la izq de la barra
+    (left)
+    (right)
+    )
+)
+
+
+;; window 
+
+(defwindow bar
+    :monitor 0
+    :stacking "fg"
+    :exclusive "true"
+    :geometry (geometry
+        :x "10px"
+        :y "10px"
+        :width "99%"
+        :height "20px"
+        :anchor "top center"
+    )
+    ;;el widget bar
+    (bar)
+)
+
+(defwindow calendar
+    :monitor 0
+    :geometry (geometry :x "10px"
+                        :y "5px"
+                        :width "270px"
+                        :height "60px"
+                        :anchor "top right")
+    (cal))

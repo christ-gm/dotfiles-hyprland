@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/home/chris/wallpapers/8.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#0f0516",
+        "foreground": "#e0c8d4",
+        "cursor": "#e0c8d4"
+    },
+    "colors": {
+        "color0": "#0f0516",
+        "color1": "#955472",
+        "color2": "#C2485D",
+        "color3": "#57369C",
+        "color4": "#C53E9A",
+        "color5": "#A36491",
+        "color6": "#D798A4",
+        "color7": "#e0c8d4",
+        "color8": "#9c8c94",
+        "color9": "#955472",
+        "color10": "#C2485D",
+        "color11": "#57369C",
+        "color12": "#C53E9A",
+        "color13": "#A36491",
+        "color14": "#D798A4",
+        "color15": "#e0c8d4"
+    }
+}
