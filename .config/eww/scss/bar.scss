@@ -214,3 +214,40 @@ tooltip.background {
   color: mix($color3, $foreground, 90%);
   margin: 0 4px 0 4px;
 }
+
+// music
+
+.musicbar trough {
+  all: unset;
+  background-color: mix($background, $foreground, 80%);
+  border-radius: 5px;
+  min-height: 4px;
+  min-width: 50px;
+  margin: 0 .5rem 0 .1rem ;
+}
+
+.musicbar{
+  min-width: 150px;
+}
+.musicbar trough highlight {
+  min-height: 4px;
+  background-color: mix($color6, $foreground, 90%);
+  border-radius: 5px;
+}
+.music{
+  font-size: .7rem;
+}
+
+.music-control{
+  padding: 0 8px;
+}
+
+.song-cover-art {
+	background-size: cover;	
+	background-position: center;
+	min-height: 18px;
+	min-width: 25px;
+	margin: 2px 8px;
+  border-radius: 4px;
+}
+

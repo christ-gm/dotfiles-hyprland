@@ -2,14 +2,23 @@
 wifi_list=$(nmcli --fields "SECURITY,SSID" device wifi list | sed 1d | sed 's/  */ /g' | sed -E "s/WPA*.?\S/ /g" | sed "s/^--/ /g" | sed "s/  //g" | sed "/--/d")
 
 connected=$(nmcli -fields WIFI g)
-if [[ "$connected" =~ "enabled" ]]; then
-	toggle="󰖪  Disable Wi-Fi"
-elif [[ "$connected" =~ "disabled" ]]; then
-	toggle="󰖩  Enable Wi-Fi"
+#caso español
+if [[ "$connected" =~ "desactivado" ]]; then
+	toggle="󰖩  Habilitar Wi-Fi"
+elif [[ "$connected" =~ "activado" ]]; then
+	toggle="󰖪  Deshabilitar Wi-Fi"
+else
+	#fallback en ingles
+	if [[ "$connected" =~ "disabled" ]]; then
+		toggle="󰖩  Enable Wi-Fi"
+	elif [[ "$connected" =~ "enabled" ]]; then
+		toggle="󰖪  Disable Wi-Fi"
+	fi
 fi
 
 # Use rofi to select wifi network
-chosen_network=$(echo -e "$toggle\n$wifi_list" | uniq -u | rofi -dmenu -i -selected-row 1 -p "Wi-Fi SSID: " )
+#chosen_network=$(echo -e "$toggle\n$wifi_list" | uniq -u | rofi -dmenu -i -selected-row 1 -p "Wi-Fi SSID: " )
+chosen_network=$(echo -e "$toggle\n$wifi_list" | grep -v '^$' | rofi -dmenu -i -selected-row 1 -p "Wi-Fi SSID: " )
 # Get name of connection
 read -r chosen_id <<< "${chosen_network:3}"
 

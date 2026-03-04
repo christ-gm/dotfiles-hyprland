@@ -6,9 +6,31 @@
 (defvar volume false)
 (defvar brightness false)
 (defvar memory false)
+(defvar music-control false) ;; nuevo            
 (defvar eww "eww -c ~/.config/eww/")
-            
 ;;defpolls;;
+
+;; deflistens playerctl
+(deflisten music :initial "" "playerctl --player=ncspot --follow metadata --format '{{ title }}' || true")
+(deflisten artist :initial "" "playerctl --player=ncspot --follow metadata --format '{{ artist }}' || true")
+; (deflisten current-music-cover :initial "" "playerctl --player=ncspot --follow metadata --format {{mpris:artUrl}}")
+; (deflisten current-music-cover :initial "" "sh ~/.config/eww/scripts/get-cover.sh")
+(deflisten current-music-cover :initial ""
+    "playerctl --player=ncspot --follow metadata --format '{{ mpris:artUrl }}' 2>/dev/null | while read -r url; do
+        if [ -n \"$url\" ] && [ \"$url\" != \"null\" ]; then
+            DEST=\"/tmp/eww_cover.png\"
+            if [ ! -f \"$DEST\" ] || [ \"$(cat /tmp/last_url 2>/dev/null)\" != \"$url\" ]; then
+                curl -s \"$url\" -o \"$DEST\"
+                echo \"$url\" > /tmp/last_url
+            fi
+            echo \"$DEST\"
+        else
+            echo \"\"
+        fi
+    done")
+
+(defpoll current-music-seek :interval "1s" "~/.config/eww/scripts/get-music-seek.sh")
+
 
 ;;WORKSPACES
 (deflisten current_workspace :initial "1" "sh ~/.config/eww/scripts/get-active-workspace.sh")
@@ -36,12 +58,12 @@
 
 ;;BRIGHTNESS
 (defpoll adjustable-brightness :interval "24h" :initial "false" "~/.config/eww/scripts/is-brightness.sh")
-(defpoll current-brightness :interval "1s" :initial "0" "echo $(($(brightnessctl get) * 100 / $(brightnessctl max)))")
+(defpoll current-brightness :interval "24h" :initial "0" "echo $(($(brightnessctl get) * 100 / $(brightnessctl max)))")
 
 ;;BATTERY
 (defpoll has-battery :interval "24h" :initial "false" "~/.config/eww/scripts/is-battery.sh")
-(defpoll current-battery :interval "15s" :initial "false" "~/.config/eww/scripts/get-battery.sh")
-(defpoll time-left :interval "15s" :initial "0" "~/.config/eww/scripts/get-time-left.sh")
+(defpoll current-battery :interval "24h" :initial "false" "~/.config/eww/scripts/get-battery.sh")
+(defpoll time-left :interval "24h" :initial "0" "~/.config/eww/scripts/get-time-left.sh")
 
 ;;MEMORY
 (defpoll current-memory :interval "10s" :initial "0" "~/.config/eww/scripts/get-memory.sh")
@@ -50,4 +72,4 @@
 (include "widgets/bar.yuck")
 (include "widgets/wallpaper.yuck")
 (include "widgets/custom-calendar.yuck")
-;(include "widgets/test.yuck")
+(include "widgets/music-control.yuck")

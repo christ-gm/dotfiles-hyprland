@@ -1,39 +1,24 @@
 #!/bin/bash
 
-battery_info=$(upower -i /org/freedesktop/UPower/devices/battery_BAT1)
+# Obtener información de la primera batería
+battery_info=$(upower -i $(upower -e | grep battery | head -n1) 2>/dev/null)
 
-time_to_empty=$(echo "$battery_info" | awk '/time to empty/ {print $4, $5}')
-time_to_full=$(echo "$battery_info" | awk '/time to full/ {print $4, $5}')
-
-convert_time() {
-    local time_value=$1
-    local unit=$2
-    local hours=0
-    local minutes=0
-
-    if [[ "$time_value" == *"hours"* ]]; then
-        # Convert hours to integer and minutes
-        numeric_value=$(echo "$time_value" | awk '{print $1}')
-        hours=${numeric_value%.*}
-        minutes=$(echo "scale=0; (${numeric_value#*.} * 60)/1" | bc)
-    elif [[ "$time_value" == *"minutes"* ]]; then
-        # If time is in minutes only
-        numeric_value=$(echo "$time_value" | awk '{print $1}')
-        minutes=${numeric_value%.*}
-    fi
-
-    # Ensure values are numbers
-    [[ -z "$hours" ]] && hours=0
-    [[ -z "$minutes" ]] && minutes=0
-
-    echo "$hours h $minutes min to $unit"
-}
-
-if [[ -n "$time_to_empty" ]]; then
-    convert_time "$time_to_empty" "empty"
-elif [[ -n "$time_to_full" ]]; then
-    convert_time "$time_to_full" "full"
-else
-    echo "Battery status: Time information not available."
+if [[ -z "$battery_info" ]]; then
+    echo "No battery"
+    exit 0
 fi
 
+# Extraer tiempo directamente formateado
+time_display=$(echo "$battery_info" | grep -E "(time to empty|time to full)" | head -n1)
+
+if [[ -n "$time_display" ]]; then
+    # Extraer solo la parte del tiempo (ej: "2.5 hours")
+    time_value=$(echo "$time_display" | sed -E 's/.*time to (empty|full):\s*//' | awk '{print $1, $2}' | xargs)
+    direction=$(echo "$time_display" | grep -o "empty\|full")
+    echo "$time_value to $direction"
+else
+    # Información alternativa - ELIMINAR ESPACIOS/TABS
+    percentage=$(echo "$battery_info" | awk -F': ' '/percentage/ {print $2}' | tr -d '[:space:]')
+    state=$(echo "$battery_info" | awk -F': ' '/state/ {print $2}' | xargs)
+    echo "${percentage:-N/A} (${state:-unknown})"
+fi

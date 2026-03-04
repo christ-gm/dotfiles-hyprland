@@ -1,1 +1,1 @@
-printf "%.0f\n" $(free -m | grep Mem | awk -F ' ' '{print ($3/$2)*100}')
+free -m | awk '/^Mem:/ {used_percent = ($3/$2)*100; printf "%.0f\n", used_percent}'
